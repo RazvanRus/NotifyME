@@ -24,6 +24,15 @@ class ViewController: UIViewController {
     
     
     //first screen labels
+    @IBOutlet weak var firstScreenLabel1: UILabel!
+    @IBOutlet weak var firstScreenLabel2: UILabel!
+    
+    
+    //variables  for animation parametres , aplhas
+    var initialAlphaForFSL:Double!
+    var completeAnimatedAlphaForFSL:Double!
+    var animationDuration:Double!
+    var delay:Double!
     
     
     override func viewDidLoad() {
@@ -45,15 +54,39 @@ class ViewController: UIViewController {
         TitleLable.alpha=0.8
         backgroundImageView.alpha=1
         backgroundButton.alpha=0
+        getStartedButton.alpha=0.5
         
+        // preparing parametres for alphas
+        initialAlphaForFSL=0.1
+        completeAnimatedAlphaForFSL=0.6
+        animationDuration=1
+        delay=0.1
+        
+        // preparing alpha for first screens labels and animation
+        firstScreenLabel1.alpha=CGFloat(initialAlphaForFSL)
+        firstScreenLabel2.alpha=CGFloat(initialAlphaForFSL)
+        
+        uiAnimation(view: firstScreenLabel1, animationDuration: animationDuration,delay: delay,alpha: completeAnimatedAlphaForFSL)
+        uiAnimation(view: firstScreenLabel2, animationDuration: animationDuration,delay: delay,alpha: completeAnimatedAlphaForFSL)
         
       
     
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+
+    
+    func uiAnimation(view:UIView,animationDuration:Double,delay:TimeInterval,alpha:Double){
+        UIView.animate(withDuration: animationDuration, delay: delay, options: .curveEaseInOut, animations: { () -> Void in
+            view.alpha = CGFloat(alpha)
+        }) { (Bool) -> Void in
+            
+            // After the animation completes, fade out the view after a delay
+          if alpha==self.completeAnimatedAlphaForFSL {
+            self.uiAnimation(view: view, animationDuration: animationDuration, delay: delay, alpha: self.initialAlphaForFSL)
+            }else{
+            self.uiAnimation(view: view, animationDuration: animationDuration, delay: delay, alpha: self.completeAnimatedAlphaForFSL)
+            }
+        }
     }
     
     
@@ -122,9 +155,10 @@ class ViewController: UIViewController {
     }
     
     @IBAction func getStartedButtonTapped(_ sender: Any) {
-        for i in 1...6 {
-            self.view.viewWithTag(i)?.isHidden=true
-        }
+
+        firstScreenLabel1.isHidden=true
+        firstScreenLabel2.isHidden=true
+
 
         
         //makign evetrithing enagled
